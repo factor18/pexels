@@ -1,6 +1,6 @@
 # Pexels
 
-Elixir client for [Pexels](https://www.pexels.com)
+Elixir client forg [Pexels](https://www.pexels.com)
 
 ## Installation
 
@@ -36,3 +36,7 @@ Or it can be provided in the runtime like:
 ```
 
 Docs can be found at [https://hexdocs.pm/pexels](https://hexdocs.pm/pexels).
+
+## License
+
+MIT
