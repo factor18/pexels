@@ -1,6 +1,7 @@
 # Pexels
-![CI Status](https://github.com/factor18/pexels/actions/workflows/elixir.yml/badge.svg)
+[![CI Status](https://github.com/factor18/pexels/actions/workflows/elixir.yml/badge.svg)](https://github.com/factor18/pexels/actions)
 [![Coverage Status](https://coveralls.io/repos/github/factor18/pexels/badge.svg?branch=main)](https://coveralls.io/github/factor18/pexels?branch=main)
+[![Hex Version](https://img.shields.io/hexpm/v/pexels)](https://hex.pm/packages/pexels)
 
 Elixir client for [Pexels](https://www.pexels.com)
 
