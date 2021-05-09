@@ -1,4 +1,4 @@
 use Mix.Config
 
-config :f18_pexels,
+config :pexels,
   base: "https://api.pexels.com/"
