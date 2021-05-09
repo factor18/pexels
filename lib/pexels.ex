@@ -32,12 +32,11 @@ defmodule Pexels do
       10
   """
   def search_photos(client, request) do
-    case PhotoSearchRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/search", query: to_kwlist(request))
-        PhotosResponse.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- PhotoSearchRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/v1/search", query: to_kwlist(request)) do
+      PhotosResponse.make(env.body)
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -52,12 +51,11 @@ defmodule Pexels do
       2
   """
   def curated_photos(client, request) do
-    case CuratedPhotosRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/curated", query: to_kwlist(request))
-        PhotosResponse.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- CuratedPhotosRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/v1/curated", query: to_kwlist(request)) do
+      PhotosResponse.make(env.body)
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -72,12 +70,11 @@ defmodule Pexels do
       "https://www.pexels.com/photo/white-and-black-cat-156934/"
   """
   def photo(client, request) do
-    case PhotoRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/photos/#{request.id}")
-        PhotoResponse.make(%{photo: env.body, liked: env.body["liked"]}, query: to_kwlist(request))
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- PhotoRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/v1/photos/#{request.id}", query: to_kwlist(request)) do
+      PhotoResponse.make(%{photo: env.body, liked: env.body["liked"]})
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -98,12 +95,11 @@ defmodule Pexels do
       10
   """
   def search_videos(client, request) do
-    case VideoSearchRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/videos/search", query: to_kwlist(request))
-        VideosResponse.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- VideoSearchRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/videos/search", query: to_kwlist(request)) do
+          VideosResponse.make(env.body)
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -118,12 +114,11 @@ defmodule Pexels do
       2
   """
   def popular_videos(client, request) do
-    case PopularVideosRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/videos/popular", query: to_kwlist(request))
-        VideosResponse.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- PopularVideosRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/videos/popular", query: to_kwlist(request)) do
+          VideosResponse.make(env.body)
+    else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -138,12 +133,11 @@ defmodule Pexels do
       "https://www.pexels.com/video/woman-dancing-in-the-spotlight-6982949/"
   """
   def video(client, request) do
-    case VideoRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/videos/videos/#{request.id}", query: to_kwlist(request))
-        Video.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- VideoRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/videos/videos/#{request.id}", query: to_kwlist(request)) do
+          Video.make(env.body)
+        else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -160,12 +154,11 @@ defmodule Pexels do
       1
   """
   def collections(client, request) do
-    case CollectionsRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/collections", query: to_kwlist(request))
-        CollectionsResponse.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- CollectionsRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/v1/collections", query: to_kwlist(request)) do
+          CollectionsResponse.make(env.body)
+        else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -180,12 +173,11 @@ defmodule Pexels do
       1
   """
   def collection_media(client, request) do
-    case CollectionMediaRequest.make(request) do
-      {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/collections/#{request.id}", query: to_kwlist(request))
-        CollectionMediaResponse.make(env.body)
-      {:error, error} ->
-        {:error, error}
+    with {:ok, request} <- CollectionMediaRequest.make(request),
+         {:ok, env} <- Tesla.get(client, "/v1/collections/#{request.id}", query: to_kwlist(request)) do
+          CollectionMediaResponse.make(env.body)
+        else
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -197,10 +189,13 @@ defmodule Pexels do
 
       iex> _client = Pexels.client()
   """
-  def client(token \\ Application.get_env(:pexels, :token), base \\ Application.get_env(:pexels, :base)) do
+  def client(token \\ Application.get_env(:pexels, :token),
+             base \\ Application.get_env(:pexels, :base),
+             timeout \\ Application.get_env(:pexels, :timeout)) do
     middleware = [
       Tesla.Middleware.JSON,
       {Tesla.Middleware.BaseUrl, base},
+      {Tesla.Middleware.Timeout, timeout: timeout},
       {Tesla.Middleware.Headers, [{"Authorization", token}]}
     ]
 
