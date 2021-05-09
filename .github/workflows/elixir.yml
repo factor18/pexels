@@ -31,3 +31,8 @@ jobs:
       env:
         PEXELS_API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
       run: mix test
+    - name: Run coveralls
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PEXELS_API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+      run: mix coveralls.github
