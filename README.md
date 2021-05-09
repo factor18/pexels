@@ -1,6 +1,6 @@
 # Pexels
 
-Elixir client for Pexels
+Elixir client for [Pexels](https://www.pexels.com)
 
 ## Installation
 
