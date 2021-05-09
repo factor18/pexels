@@ -2,9 +2,9 @@ defmodule Pexels.Collection do
   use Accessible
 
   use Construct do
-    field :id, :integer
+    field :id, :string
     field :title, :string
-    field :description, :string
+    field :description, :string, default: nil
     field :private, :boolean
     field :media_count, :integer
     field :photos_count, :integer

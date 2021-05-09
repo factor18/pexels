@@ -3,7 +3,7 @@ defmodule Pexels.MixProject do
 
   def project do
     [
-      app: :f18_pexels,
+      app: :pexels,
       version: "0.1.0",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,

@@ -1,7 +1,6 @@
 defmodule Pexels.Client.Video.VideoSearchRequest do
   use Accessible
 
-  alias Pexels.Color
   alias Pexels.Client.{Size, Locale, Orientation, Limit}
 
   use Construct do
