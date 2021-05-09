@@ -1,5 +1,5 @@
 defmodule Pexels.Client.Collection.CollectionMediaResponse do
-  alias Pexels.Client.Media
+  alias Pexels.Media
   
   use Accessible
 

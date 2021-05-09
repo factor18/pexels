@@ -1,4 +1,15 @@
 defmodule Pexels do
+  @moduledoc ~S"""
+  Parses the given `line` into a command.
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, %{liked: _liked, photo: photo}} = Pexels.photo(client, %{id: 156934})
+      iex> photo.url
+      "https://www.pexels.com/photo/white-and-black-cat-156934/"
+  """
+
   alias Pexels.Video
   alias Pexels.Client.Video.{VideoSearchRequest, PopularVideosRequest, VideoRequest, VideosResponse}
   alias Pexels.Client.Photo.{PhotoSearchRequest, CuratedPhotosRequest, PhotoRequest, PhotoResponse, PhotosResponse}
@@ -6,6 +17,20 @@ defmodule Pexels do
 
   # Photos
 
+  @doc ~S"""
+  This endpoint enables you to search Pexels for any topic that you would like.
+  
+  For example your query could be something broad like Nature, Tigers, People.
+  
+  Or it could be something specific like Group of people working.
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, response = %Pexels.Client.Photo.PhotosResponse{}} = Pexels.search_photos(client, %{query: "cat", per_page: 10, page: 1})
+      iex> response.photos |> Enum.count
+      10
+  """
   def search_photos(client, request) do
     case PhotoSearchRequest.make(request) do
       {:ok, request} ->
@@ -16,6 +41,16 @@ defmodule Pexels do
     end
   end
 
+  @doc ~S"""
+  This endpoint enables you to receive real-time photos curated by the Pexels team. 
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, response = %Pexels.Client.Photo.PhotosResponse{}} = Pexels.curated_photos(client, %{per_page: 2, page: 1})
+      iex> response.photos |> Enum.count
+      2
+  """
   def curated_photos(client, request) do
     case CuratedPhotosRequest.make(request) do
       {:ok, request} ->
@@ -26,11 +61,21 @@ defmodule Pexels do
     end
   end
 
+  @doc ~S"""
+  Retrieve a specific Photo from its id.
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, %{liked: _liked, photo: photo} = %Pexels.Client.Photo.PhotoResponse{}} = Pexels.photo(client, %{id: 156934})
+      iex> photo.url
+      "https://www.pexels.com/photo/white-and-black-cat-156934/"
+  """
   def photo(client, request) do
     case PhotoRequest.make(request) do
       {:ok, request} ->
         {:ok, env} = Tesla.get(client, "/v1/photos/#{request.id}")
-        PhotoResponse.make(%{photo: env.body, liked: env.body["liked"]})
+        PhotoResponse.make(%{photo: env.body, liked: env.body["liked"]}, query: to_kwlist(request))
       {:error, error} ->
         {:error, error}
     end
@@ -38,6 +83,20 @@ defmodule Pexels do
 
   # Videos
 
+  @doc ~S"""
+  This endpoint enables you to search Pexels for any topic that you would like.
+  
+  For example your query could be something broad like Nature, Tigers, People.
+  
+  Or it could be something specific like Group of people working.
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, response = %Pexels.Client.Video.VideosResponse{}} = Pexels.search_videos(client, %{query: "cat", per_page: 10, page: 1})
+      iex> response.videos |> Enum.count
+      10
+  """
   def search_videos(client, request) do
     case VideoSearchRequest.make(request) do
       {:ok, request} ->
@@ -48,6 +107,16 @@ defmodule Pexels do
     end
   end
 
+  @doc ~S"""
+  This endpoint enables you to receive the current popular Pexels videos. 
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, response = %Pexels.Client.Video.VideosResponse{}} = Pexels.popular_videos(client, %{per_page: 2, page: 1})
+      iex> response.videos |> Enum.count
+      2
+  """
   def popular_videos(client, request) do
     case PopularVideosRequest.make(request) do
       {:ok, request} ->
@@ -58,10 +127,20 @@ defmodule Pexels do
     end
   end
 
+  @doc ~S"""
+  Retrieve a specific Video from its id.
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, video = %Pexels.Video{}} = Pexels.video(client, %{id: 6982949})
+      iex> video.url
+      "https://www.pexels.com/video/woman-dancing-in-the-spotlight-6982949/"
+  """
   def video(client, request) do
     case VideoRequest.make(request) do
       {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/videos/videos/#{request.id}")
+        {:ok, env} = Tesla.get(client, "/videos/videos/#{request.id}", query: to_kwlist(request))
         Video.make(env.body)
       {:error, error} ->
         {:error, error}
@@ -70,20 +149,40 @@ defmodule Pexels do
 
   # Collections
 
+  @doc ~S"""
+  This endpoint returns all of your collections. 
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, %{collections: collections} = %Pexels.Client.Collection.CollectionsResponse{}} = Pexels.collections(client, %{per_page: 1})
+      iex> collections |> Enum.count
+      1
+  """
   def collections(client, request) do
     case CollectionsRequest.make(request) do
       {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/collections", query: to_kwlist(request)) |> IO.inspect
+        {:ok, env} = Tesla.get(client, "/v1/collections", query: to_kwlist(request))
         CollectionsResponse.make(env.body)
       {:error, error} ->
         {:error, error}
     end
   end
 
+  @doc ~S"""
+  This endpoint returns all of your collections. 
+
+  ## Examples
+
+      iex> client = Pexels.client()
+      iex> {:ok, %{media: media} = %Pexels.Client.Collection.CollectionMediaResponse{}} = Pexels.collection_media(client, %{id: "z40vgi2", per_page: 1})
+      iex> media |> Enum.count
+      1
+  """
   def collection_media(client, request) do
     case CollectionMediaRequest.make(request) do
       {:ok, request} ->
-        {:ok, env} = Tesla.get(client, "/v1/collections/#{request.id}") |> IO.inspect
+        {:ok, env} = Tesla.get(client, "/v1/collections/#{request.id}", query: to_kwlist(request))
         CollectionMediaResponse.make(env.body)
       {:error, error} ->
         {:error, error}
@@ -91,7 +190,13 @@ defmodule Pexels do
   end
 
   # Client
+  @doc ~S"""
+  Creates the `tesla` client for pexels
 
+  ## Examples
+
+      iex> _client = Pexels.client()
+  """
   def client(token \\ Application.get_env(:pexels, :token), base \\ Application.get_env(:pexels, :base)) do
     middleware = [
       Tesla.Middleware.JSON,

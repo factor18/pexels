@@ -1,4 +1,15 @@
 defmodule Pexels.Collection do  
+  @moduledoc ~S"""
+      %Pexels.Collection {
+        description: nil,
+        id: "z40vgi2",
+        media_count: 3,
+        photos_count: 2,
+        private: false,
+        title: "Purple",
+        videos_count: 1
+      }
+  """
   use Accessible
 
   use Construct do

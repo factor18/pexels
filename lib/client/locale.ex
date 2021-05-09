@@ -1,4 +1,14 @@
 defmodule Pexels.Client.Locale do
+  @moduledoc ~S"""
+  The locale of the search you are performing.
+
+  ## Examples
+
+      iex> Pexels.Client.Locale.enUS()
+      "en-US"
+
+  """
+
   @behaviour Construct.Type
 
   @locales [
@@ -9,6 +19,14 @@ defmodule Pexels.Client.Locale do
   ]
 
   @locales |> Enum.each(fn (locale) ->
+    @doc """
+    #{locale} locale
+
+    ## Example
+
+        iex> Pexels.Client.Locale.#{locale |> String.replace("-", "")}()
+        "#{locale}"
+    """
     def unquote(:"#{locale |> String.replace("-", "")}")(), do: unquote(locale)
   end)
 

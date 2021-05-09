@@ -1,9 +1,28 @@
 defmodule Pexels.Color do
+  @moduledoc ~S"""
+  Desired photo color.
+  
+  Supported colors: red, orange, yellow, green, turquoise, blue, violet, pink, brown, black, gray, white or any hexidecimal color code (eg. #ffffff).
+
+  ## Examples
+
+      iex> Pexels.Color.red()
+      "red"
+
+  """
   @behaviour Construct.Type
 
   @colors ["red", "orange", "yellow", "green", "turquoise", "blue", "violet", "pink", "brown", "black", "gray", "white"]
 
   @colors |> Enum.each(fn (color) ->
+    @doc """
+    #{color} color
+
+    ## Example
+
+        iex> Pexels.Client.Color.#{color}()
+        "#{color}"
+    """
     def unquote(:"#{color}")(), do: unquote(color)
   end)
 
