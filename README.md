@@ -1,7 +1,8 @@
 # Pexels
 ![CI Status](https://github.com/factor18/pexels/actions/workflows/elixir.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/factor18/pexels/badge.svg?branch=main)](https://coveralls.io/github/factor18/pexels?branch=main)
 
-Elixir client forg [Pexels](https://www.pexels.com)
+Elixir client for [Pexels](https://www.pexels.com)
 
 ## Installation
 
