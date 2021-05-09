@@ -26,7 +26,7 @@ defmodule Pexels.MixProject do
 
   defp docs do
     [
-      main: "readme",
+      main: "Pexels",
       extras: [{:"README.md", [title: "Overview"]}],
       groups_for_modules: [
         "Client Filters": [
