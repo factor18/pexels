@@ -11,6 +11,13 @@ defmodule Pexels.MixProject do
       elixir: "~> 1.7",
       package: package(),
       description: description(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/factor18/pexels",
       homepage_url: "https://github.com/factor18/pexels",
@@ -80,6 +87,7 @@ defmodule Pexels.MixProject do
       {:hackney, "~> 1.17"},
       {:construct, "~> 2.1"},
       {:accessible, "~> 0.3.0"},
+      {:excoveralls, "~> 0.10", only: :test},
       {:ex_doc, "~> 0.24", only: :dev, runtime: false},
     ]
   end

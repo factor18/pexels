@@ -1,5 +1,5 @@
 # Pexels
-![a](https://github.com/factor18/pexels/actions/workflows/elixir.yml/badge.svg)
+![CI Status](https://github.com/factor18/pexels/actions/workflows/elixir.yml/badge.svg)
 
 Elixir client forg [Pexels](https://www.pexels.com)
 
