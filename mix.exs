@@ -8,7 +8,7 @@ defmodule Pexels.MixProject do
       docs: docs(),
       name: "Pexels",
       version: "0.1.0",
-      elixir: "~> 1.11",
+      elixir: "~> 1.7",
       package: package(),
       description: description(),
       start_permanent: Mix.env() == :prod,
